@@ -1,0 +1,42 @@
+Quartus II Archive log --	C:/Users/Chris/Dropbox/GPU_Assignment/hw6/__lg_highlevel.auto.qarlog
+
+Archive:	C:/Users/Chris/Dropbox/GPU_Assignment/hw6/__lg_highlevel.auto.qar
+Date:		Mon Apr 15 17:05:43 2013
+Quartus II 32-bit		12.1 Build 177 11/07/2012 SJ Web Edition
+
+	=========== Files Selected: ===========
+C:/Users/Chris/Dropbox/GPU_Assignment/hw6/db/lg_highlevel.cbx.xml
+C:/Users/Chris/Dropbox/GPU_Assignment/hw6/db/lg_highlevel.qpf
+C:/Users/Chris/Dropbox/GPU_Assignment/hw6/output_files/lg_highlevel.archive.rpt
+C:/Users/Chris/Dropbox/GPU_Assignment/hw6/output_files/lg_highlevel.flow.rpt
+C:/Users/Chris/Dropbox/GPU_Assignment/hw6/output_files/lg_highlevel.map.rpt
+C:/Users/Chris/Dropbox/GPU_Assignment/hw6/output_files/lg_highlevel.map.smsg
+C:/Users/Chris/Dropbox/GPU_Assignment/hw6/output_files/lg_highlevel.map.summary
+C:/Users/Chris/Dropbox/GPU_Assignment/hw6/output_files/lg_highlevel.restore.rpt
+Vertex.v
+__lg_highlevel.auto.qarlog
+assignment_defaults.qdf
+data.hex
+decode.v
+execute.v
+fetch.v
+global_def.h
+gpu.v
+lg_highlevel.qsf
+lg_highlevel.v
+memory.v
+multi_sram.v
+pixel_gen.v
+pll.ppf
+pll.qip
+pll.v
+pll_bb.v
+seven_segment.v
+sign_extension.v
+test0.hex
+vga_controller.v
+writeback.v
+	======= Total: 31 files to archive =======
+
+	================ Status: ===============
+All files archived successfully.
