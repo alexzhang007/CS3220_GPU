@@ -523,5 +523,6 @@ set_global_assignment -name VERILOG_FILE lg_highlevel.v
 set_global_assignment -name SOURCE_FILE global_def.h
 set_global_assignment -name VERILOG_FILE fetch.v
 set_global_assignment -name QIP_FILE pll.qip
-set_global_assignment -name VERILOG_FILE Vertex.v
 set_global_assignment -name SEARCH_PATH output_files/ -tag from_archive
+set_global_assignment -name VERILOG_FILE vertex.v
+set_global_assignment -name VERILOG_FILE rasterize.v
