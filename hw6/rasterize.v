@@ -6,6 +6,7 @@ module Rasterize(
   I_CLOCK,
   I_LOCK,
   I_Opcode, // DRAW
+  I_RST_N,
   
   // vertices for 3 triangles
   I_T1_V1,
@@ -65,75 +66,149 @@ input [`OPCODE_WIDTH-1:0] I_Opcode;
 
 // vertices for 3 triangles
 input [63:0] I_T1_V1;
-input [63:0] I_T1_V2,
-input [63:0] I_T1_V3,
+input [63:0] I_T1_V2;
+input [63:0] I_T1_V3;
   
-input [63:0] I_T2_V1,
-input [63:0] I_T2_V2,
-input [63:0] I_T2_V3,
+input [63:0] I_T2_V1;
+input [63:0] I_T2_V2;
+input [63:0] I_T2_V3;
   
-input [63:0] I_T3_V1,
-input [63:0] I_T3_V2,
-input [63:0] I_T3_V3,
+input [63:0] I_T3_V1;
+input [63:0] I_T3_V2;
+input [63:0] I_T3_V3;
   
 // corresponding colors
-  I_T1_C1,
-  I_T1_C2,
-  I_T1_C3,
+// likely to be the same
+input [15:0] I_T1_C1;
+input [15:0] I_T1_C2;
+input [15:0] I_T1_C3;
   
-  I_T2_C1,
-  I_T2_C2,
-  I_T2_C3,
+input [15:0] I_T2_C1;
+input [15:0] I_T2_C2;
+input [15:0] I_T2_C3;
   
-  I_T3_C1,
-  I_T3_C2,
-  I_T3_C3,
-
-
-// Outputs to the next stage
-output reg O_LOCK;
-output reg [`OPCODE_WIDTH-1:0] O_Opcode;
-output reg O_FetchStall;
-output reg O_DepStall;
-
-// scalar
-output reg [`REG_WIDTH-1:0] O_ALUOut;
-output reg [3:0] O_DestRegIdx;
-output reg [`REG_WIDTH-1:0] O_DestValue;
-
-// vector
-output reg [`VREG_WIDTH-1:0] O_ALUOutV;
-output reg [`VREG_WIDTH-1:0] O_DestValueV;
-output reg [5:0] O_DestRegIdxV;
-output reg [1:0] O_DestRegIdxV_Idx;
-
-// GPU
-output reg [3:0] O_Type;
+input [15:0] I_T3_C1;
+input [15:0] I_T3_C2;
+input [15:0] I_T3_C3;
 
 /////////////////////////////////////////
 // WIRE/REGISTER DECLARATION GOES HERE
 /////////////////////////////////////////
 //
 
+// The value of vr[1]: X coordinate [31:16]
+// The value of vr[2]: Y coordinate [47:32]
+// The value of vr[3]: Z coordinate [63:48]
 
+// triangle 1
+wire [15:0] Tri1_X1;
+wire [15:0] Tri1_Y1;
+wire [15:0] Tri1_Z1;
+wire [15:0] Tri1_X2;
+wire [15:0] Tri1_Y2;
+wire [15:0] Tri1_Z2;
+wire [15:0] Tri1_X3;
+wire [15:0] Tri1_Y3;
+wire [15:0] Tri1_Z3;
+
+// triangle 2
+wire [15:0] Tri2_X1;
+wire [15:0] Tri2_Y1;
+wire [15:0] Tri2_Z1;
+wire [15:0] Tri2_X2;
+wire [15:0] Tri2_Y2;
+wire [15:0] Tri2_Z2;
+wire [15:0] Tri2_X3;
+wire [15:0] Tri2_Y3;
+wire [15:0] Tri2_Z3;
+
+// triangle 3
+wire [15:0] Tri3_X1;
+wire [15:0] Tri3_Y1;
+wire [15:0] Tri3_Z1;
+wire [15:0] Tri3_X2;
+wire [15:0] Tri3_Y2;
+wire [15:0] Tri3_Z2;
+wire [15:0] Tri3_X3;
+wire [15:0] Tri3_Y3;
+wire [15:0] Tri3_Z3;
+
+assign Tri1_X1 = I_T1_V1[31:16];
+assign Tri1_Y1 = I_T1_V1[47:32];
+assign Tri1_Z1 = I_T1_V1[63:48];
+assign Tri1_X2 = I_T1_V2[31:16];
+assign Tri1_Y2 = I_T1_V2[47:32];
+assign Tri1_Z2 = I_T1_V2[63:48];
+assign Tri1_X3 = I_T1_V3[31:16];
+assign Tri1_Y3 = I_T1_V3[47:32];
+assign Tri1_Z3 = I_T1_V3[63:48];
+
+assign Tri2_X1 = I_T2_V1[31:16];
+assign Tri2_Y1 = I_T2_V1[47:32];
+assign Tri2_Z1 = I_T2_V1[63:48];
+assign Tri2_X2 = I_T2_V2[31:16];
+assign Tri2_Y2 = I_T2_V2[47:32];
+assign Tri2_Z2 = I_T2_V2[63:48];
+assign Tri2_X3 = I_T2_V3[31:16];
+assign Tri2_Y3 = I_T2_V3[47:32];
+assign Tri2_Z3 = I_T2_V3[63:48];
+
+assign Tri3_X1 = I_T3_V1[31:16];
+assign Tri3_Y1 = I_T3_V1[47:32];
+assign Tri3_Z1 = I_T3_V1[63:48];
+assign Tri3_X2 = I_T3_V2[31:16];
+assign Tri3_Y2 = I_T3_V2[47:32];
+assign Tri3_Z2 = I_T3_V2[63:48];
+assign Tri3_X3 = I_T3_V3[31:16];
+assign Tri3_Y3 = I_T3_V3[47:32];
+assign Tri3_Z3 = I_T3_V3[63:48];
 	
 /////////////////////////////////////////
 // ALWAYS STATEMENT GOES HERE
 /////////////////////////////////////////
 //
 
-always @(negedge I_CLOCK)
+always @(posedge I_CLK or negedge I_RST_N)
 begin
-  O_LOCK <= I_LOCK;
-  // O_FetchStall <= I_FetchStall;
+	if (!I_RST_N) 
+	begin
+		// logic goes here
+	end 
+	else	
+	begin
+		// 
+	end
+end
 
-  if (I_LOCK == 1'b1) 
-  begin
-    	 
-	  
-  end // if (I_LOCK == 1'b1)
-  else O_FetchStall <= 1'b1;
-  
-end // always @(negedge I_CLOCK)
+
+always @(posedge I_CLK or negedge I_RST_N)
+begin
+  if (!I_RST_N) begin
+    colInd <= 0;
+  end else begin
+    if (!I_VIDEO_ON) begin
+      if (colInd < 639)
+        colInd <= colInd + 1;
+      else
+        colInd <= 0;
+    end
+  end
+end
+
+always @(posedge I_CLK or negedge I_RST_N)
+begin
+  if (!I_RST_N) begin
+    rowInd <= 0;
+  end else begin
+    if (!I_VIDEO_ON) begin
+      if (colInd == 0) begin
+        if (rowInd < 399)
+          rowInd <= rowInd + 1;
+        else
+          rowInd <= 0;
+      end
+    end
+  end
+end
 
 endmodule // module Rasterize
