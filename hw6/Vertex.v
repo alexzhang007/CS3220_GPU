@@ -145,7 +145,10 @@ assign Sine_Value =
 			): (16'h0000) // end I_DepStall
 		): (16'h0000) // end I_FetchStall
 	): (16'h0000); // end I_LOCK
-	
+
+// cosine even
+// cos(theta) = cos (-theta)	
+
 assign Cosine_Value = 
 	(I_LOCK==1'b1) ? 
 	(

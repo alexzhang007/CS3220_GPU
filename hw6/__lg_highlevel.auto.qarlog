@@ -1,19 +1,17 @@
-Quartus II Archive log --	C:/Users/Chris/Dropbox/GPU_Assignment/hw6/__lg_highlevel.auto.qarlog
+Quartus II Archive log --	C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/__lg_highlevel.auto.qarlog
 
-Archive:	C:/Users/Chris/Dropbox/GPU_Assignment/hw6/__lg_highlevel.auto.qar
-Date:		Mon Apr 15 17:05:43 2013
+Archive:	C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/__lg_highlevel.auto.qar
+Date:		Wed Apr 24 21:00:25 2013
 Quartus II 32-bit		12.1 Build 177 11/07/2012 SJ Web Edition
 
 	=========== Files Selected: ===========
-C:/Users/Chris/Dropbox/GPU_Assignment/hw6/db/lg_highlevel.cbx.xml
-C:/Users/Chris/Dropbox/GPU_Assignment/hw6/db/lg_highlevel.qpf
-C:/Users/Chris/Dropbox/GPU_Assignment/hw6/output_files/lg_highlevel.archive.rpt
-C:/Users/Chris/Dropbox/GPU_Assignment/hw6/output_files/lg_highlevel.flow.rpt
-C:/Users/Chris/Dropbox/GPU_Assignment/hw6/output_files/lg_highlevel.map.rpt
-C:/Users/Chris/Dropbox/GPU_Assignment/hw6/output_files/lg_highlevel.map.smsg
-C:/Users/Chris/Dropbox/GPU_Assignment/hw6/output_files/lg_highlevel.map.summary
-C:/Users/Chris/Dropbox/GPU_Assignment/hw6/output_files/lg_highlevel.restore.rpt
-Vertex.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/db/lg_highlevel.qpf
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/output_files/lg_highlevel.archive.rpt
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/output_files/lg_highlevel.flow.rpt
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/output_files/lg_highlevel.map.rpt
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/output_files/lg_highlevel.map.smsg
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/output_files/lg_highlevel.map.summary
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/output_files/lg_highlevel.restore.rpt
 __lg_highlevel.auto.qarlog
 assignment_defaults.qdf
 data.hex
@@ -31,9 +29,11 @@ pll.ppf
 pll.qip
 pll.v
 pll_bb.v
+rasterize.v
 seven_segment.v
 sign_extension.v
 test0.hex
+vertex.v
 vga_controller.v
 writeback.v
 	======= Total: 31 files to archive =======

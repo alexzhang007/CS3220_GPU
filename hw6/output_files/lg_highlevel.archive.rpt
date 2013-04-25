@@ -1,5 +1,5 @@
 Archive Project report for lg_highlevel
-Mon Apr 15 17:04:52 2013
+Wed Apr 24 21:00:26 2013
 Quartus II 32-bit Version 12.1 Build 177 11/07/2012 SJ Web Edition
 
 
@@ -35,7 +35,7 @@ applicable agreement for further details.
 +----------------------------------------------------------------+
 ; Archive Project Summary                                        ;
 +------------------------+---------------------------------------+
-; Archive Project Status ; Successful - Mon Apr 15 17:04:52 2013 ;
+; Archive Project Status ; Successful - Wed Apr 24 21:00:26 2013 ;
 ; Revision Name          ; lg_highlevel                          ;
 ; Top-level Entity Name  ; lg_highlevel                          ;
 ; Family                 ; Cyclone II                            ;
@@ -67,19 +67,20 @@ Info: Parsing: fetch.v
 Info: Discovered: ./test0.hex
 Info: Parsing: pll.v
 Info: Parsing: pll_bb.v
-Info: Parsing: Vertex.v
+Info: Parsing: vertex.v
+Info: Parsing: rasterize.v
 Info: ----------------------------------------------------------
 Info: ----------------------------------------------------------
-Info: Generated archive 'C:/Users/Chris/Dropbox/GPU_Assignment/hw6_04152013.qar'
+Info: Generated archive 'C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_backup0424.qar'
 Info: ----------------------------------------------------------
 Info: ----------------------------------------------------------
 Info: Generated report 'lg_highlevel.archive.rpt'
-Error (23031): Evaluation of Tcl script c:/altera/12.1/quartus/common/tcl/apps/qpm/qar.tcl unsuccessful
-Error: Quartus II 32-bit Shell was unsuccessful. 11 errors, 5 warnings
-    Error: Peak virtual memory: 259 megabytes
-    Error: Processing ended: Mon Apr 15 17:04:52 2013
-    Error: Elapsed time: 00:00:10
-    Error: Total CPU time (on all processors): 00:00:02
+Info (23030): Evaluation of Tcl script c:/altera/12.1/quartus/common/tcl/apps/qpm/qar.tcl was successful
+Info: Quartus II 32-bit Shell was successful. 0 errors, 3 warnings
+    Info: Peak virtual memory: 271 megabytes
+    Info: Processing ended: Wed Apr 24 21:00:26 2013
+    Info: Elapsed time: 00:00:02
+    Info: Total CPU time (on all processors): 00:00:01
 
 
 +---------------------------------------------------------+
@@ -87,6 +88,7 @@ Error: Quartus II 32-bit Shell was unsuccessful. 11 errors, 5 warnings
 +---------------------------------------------------------+
 ; File Name                                               ;
 +---------------------------------------------------------+
+; __lg_highlevel.auto.qarlog                              ;
 ; assignment_defaults.qdf                                 ;
 ; data.hex                                                ;
 ; decode.v                                                ;
@@ -100,6 +102,7 @@ Error: Quartus II 32-bit Shell was unsuccessful. 11 errors, 5 warnings
 ; lg_highlevel.v                                          ;
 ; memory.v                                                ;
 ; multi_sram.v                                            ;
+; output_files/lg_highlevel.archive.rpt                   ;
 ; output_files/lg_highlevel.flow.rpt                      ;
 ; output_files/lg_highlevel.map.rpt                       ;
 ; output_files/lg_highlevel.map.smsg                      ;
@@ -110,11 +113,12 @@ Error: Quartus II 32-bit Shell was unsuccessful. 11 errors, 5 warnings
 ; pll.qip                                                 ;
 ; pll.v                                                   ;
 ; pll_bb.v                                                ;
+; rasterize.v                                             ;
 ; seven_segment.v                                         ;
 ; sign_extension.v                                        ;
 ; simulation/modelsim/my_custom_view.do                   ;
 ; test0.hex                                               ;
-; Vertex.v                                                ;
+; vertex.v                                                ;
 ; vga_controller.v                                        ;
 ; writeback.v                                             ;
 +---------------------------------------------------------+

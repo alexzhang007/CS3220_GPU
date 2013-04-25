@@ -104,7 +104,6 @@ begin
 		O_PC <= PC + 16'h4;
 		__BranchResolved <=1'b1;
 	 end // if (I_BranchAddrSelect==1'b1)
-	 // else if (I_DepStallSignal==1'b1 || I_BranchStallSignal==1'b1) O_FetchStall <= 1'b1; 
 	 else if (I_DepStallSignal==1'b1) O_FetchStall <= 1'b1;  
 	 else if (I_BranchStallSignal==1'b1) begin
 		O_FetchStall <= 1'b1; 
@@ -121,7 +120,6 @@ begin
 		O_FetchStall <= 1'b0;
 		O_IR <= InstMem[PC[`PC_WIDTH-1:2]];
 		O_PC <= PC + 16'h4;
-		// PC = PC + 16'h4;
 	 end // end else
 	 
   end // if (I_LOCK == 0)

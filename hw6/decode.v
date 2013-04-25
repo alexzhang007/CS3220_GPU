@@ -3,22 +3,51 @@
 module Decode(
   I_CLOCK,
   I_LOCK,
+  
   I_PC,
   I_IR,
+  
   I_FetchStall,
+  
+  // scalar from writeback stage 
   I_WriteBackEnable,
   I_WriteBackRegIdx,
   I_WriteBackData,
+  
+  // vector from writeback stage
+  I_WriteBackEnableV,
+  I_WriteBackRegIdxV,
+  I_WriteBackRegIdxV_Idx,
+  I_WriteBackDataV,
+  
   O_LOCK,
   O_PC,
+  
   O_Opcode,
-  O_Src1Value,
-  O_Src2Value,
+
+  // immediate
+  O_Imm,
+  
+  // scalar
   O_DestRegIdx,
   O_DestValue,
-  O_Imm,
+  
+  O_Src1Value,
+  O_Src2Value,
+  
+  // vector
+  O_Src1ValueV,
+  O_Src2ValueV,
+  O_DestValueV;
+  
+  O_DestRegIdxV,
+  O_DestRegIdxV_Idx,
+  
+  // stall signals
   O_FetchStall,
   O_DepStall,
+  
+  // stall signals to fetch stage
   O_BranchStallSignal,
   O_DepStallSignal
 );
@@ -284,17 +313,22 @@ assign O_BranchStallSignal = (__DepStallSignal==1'b0) ? __BranchStallSignal : 1'
 always @(posedge I_CLOCK) begin
 
   if (I_LOCK == 1'b1) begin
-    
-	 if (I_WriteBackEnable==1'b1) begin
+   
+	// if both enable signals are on, the WriteBack is signaled by 
+	// VCOMPMOV or VCOMPMOVI
+	if ((I_WriteBackEnable==1'b1) && (I_WriteBackEnableV==1'b1)) begin
+		VRF[I_WriteBackRegIdxV][I_WriteBackRegIdxV_Idx] <= I_WriteBackData;
+	end
+	else if (I_WriteBackEnable==1'b1) begin 
 		
-		 // write data back into the register file
-		 RF[I_WriteBackRegIdx] <= I_WriteBackData;
+		// write data back into the register file
+		RF[I_WriteBackRegIdx] <= I_WriteBackData;
 		 
-		 // Update Conditional Code to the following branch instruction to refer
-		 if      ($signed(I_WriteBackData)>0) ConditionalCode = 3'b001; // CC = P
-		 else if ($signed(I_WriteBackData)<0) ConditionalCode = 3'b100; // CC = N
-		 else                                 ConditionalCode = 3'b010; // CC = Z
-		 
+		// Update Conditional Code to the following branch instruction to refer
+		if      ($signed(I_WriteBackData)>0) ConditionalCode = 3'b001; // CC = P
+		else if ($signed(I_WriteBackData)<0) ConditionalCode = 3'b100; // CC = N
+		else                                 ConditionalCode = 3'b010; // CC = Z
+		
 	end // if (I_WriteBackEnable==1'b1)
 	else if (I_WriteBackEnableV==1'b1) begin
 		VRF[I_WriteBackRegIdxV] <= I_WriteBackDataV;
@@ -318,8 +352,8 @@ begin
   if (I_LOCK == 1'b1)
   begin
     
-	 if (I_WriteBackEnable==1'b1 ) RF_VALID  = (RF_VALID | ((16'b0000000000000001)<<I_WriteBackRegIdx));
-	 if (I_WriteBackEnableV==1'b1) VRF_VALID = (VRF_VALID | ((16'b0000000000000001)<<I_WriteBackRegIdxV));
+	 if ((I_WriteBackEnable==1'b1) && (I_WriteBackEnableV==1'b0) ) RF_VALID  = (RF_VALID | ((16'b1)<<I_WriteBackRegIdx));
+	 if (I_WriteBackEnableV==1'b1) VRF_VALID = (VRF_VALID | ((64'b1)<<I_WriteBackRegIdxV));
 	 
 	 if (__DepStallSignal==1'b1) begin // && __WriteToRead==1'b0) begin
 		O_DepStall <= 1'b1;
@@ -332,35 +366,32 @@ begin
 			O_DepStall <= 1'b0;
 			O_FetchStall <= 1'b0;
 			
-			// if (__BranchStallSignal==1'b1) O_BranchStallSignal <= 1'b1;
-			// else O_BranchStallSignal <= 1'b0;
-			
 			case(I_IR[31:24])
 			`OP_ADD_D, `OP_AND_D: // check [19:16], [11:8]
 			begin
 				O_Src1Value <= RF[I_IR[19:16]];
 				O_Src2Value <= RF[I_IR[11:8]];
 				O_DestRegIdx <= I_IR[23:20];
-				RF_VALID = (RF_VALID & ~((16'b0000000000000001)<<I_IR[23:20]));
+				RF_VALID = (RF_VALID & ~((16'b1)<<I_IR[23:20]));
 			end // end case `OP_ADD_D, `OP_AND_D
 			`OP_ADDI_D, `OP_ANDI_D, `OP_LDW:  // check [19:16]
 			begin
 				O_Src1Value <= RF[I_IR[19:16]];
 				O_Imm <= $signed(Imm32);
 				O_DestRegIdx <= I_IR[23:20];
-				RF_VALID = (RF_VALID & ~((16'b0000000000000001)<<I_IR[23:20]));
+				RF_VALID = (RF_VALID & ~((16'b1)<<I_IR[23:20]));
 			end // end case `OP_ADDI_D, `OP_ANDI_D, `OP_LDW
 			`OP_MOV:  // check [11:8]
 			begin
 				O_Src2Value <= RF[I_IR[11:8]];
 				O_DestRegIdx <= I_IR[19:16];
-				RF_VALID = (RF_VALID & ~((16'b0000000000000001)<<I_IR[19:16]));
+				RF_VALID = (RF_VALID & ~((16'b1)<<I_IR[19:16]));
 			end // end case `OP_MOV
 			`OP_MOVI_D:  
 			begin
 				O_Imm <= $signed(Imm32);
 				O_DestRegIdx <= I_IR[19:16];
-				RF_VALID = (RF_VALID & ~((16'b0000000000000001)<<I_IR[19:16]));
+				RF_VALID = (RF_VALID & ~((16'b1)<<I_IR[19:16]));
 			end // end case `OP_MOVI_D
 			`OP_STW:  // check [23:20], [19:16]
 			begin

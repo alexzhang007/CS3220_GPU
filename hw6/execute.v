@@ -3,20 +3,45 @@
 module Execute(
   I_CLOCK,
   I_LOCK,
+  
   I_PC,
   I_Opcode,
+  
+  I_Imm,
+  
+  // scalar
   I_Src1Value,
   I_Src2Value,
-  I_DestRegIdx,
-  I_Imm,
   I_DestValue,
+  I_DestRegIdx,
+  
+  // vector
+  I_Src1ValueV,
+  I_Src2ValueV,
+  I_DestValueV;
+  
+  I_DestRegIdxV,
+  I_DestRegIdxV_Idx,
+    
   I_FetchStall,
   I_DepStall,
+  
   O_LOCK,
-  O_ALUOut,
   O_Opcode,
-  O_DestRegIdx,
+  
+  // scalar out
+  O_ALUOut,
   O_DestValue,
+  O_DestRegIdx,
+  
+  // vector out
+  O_ALUOutV,
+  O_DestValueV,
+  O_DestRegIdxV,
+  O_DestRegIdxV_Idx,
+  
+  O_Type,
+  
   O_FetchStall,
   O_DepStall
 );
@@ -115,31 +140,39 @@ begin
 		  `OP_JMP: O_ALUOut <= I_DestValue;
 		  `OP_JSRR: O_ALUOut <= I_DestValue;
 		  // vector
+		  //
+		  // [ elmt0 ] => [ 15:0  ]
+		  // | elmt1 | => | 31:16 |
+		  // | elmt2 | => | 47:32 |
+		  // [ elmt3 ] => [ 63:48 ]
 		  `OP_VADD:
 			begin
 				// O_DestValueV <= ((I_Src1ValueV[63:48] + I_Src1ValueV[63:48])<<`VDEST3) | ((I_Src1ValueV[47:32] + I_Src1ValueV[47:32])<<`VDEST2) | ((I_Src1ValueV[31:16] + I_Src1ValueV[31:16])<<`VDEST1) | ((I_Src1ValueV[15:0] + I_Src1ValueV[15:0])<<`VDEST0);
-				O_ALUOutV  <= {(I_Src1ValueV[63:48] + I_Src1ValueV[63:48]), (I_Src1ValueV[47:32] + I_Src1ValueV[47:32]), (I_Src1ValueV[31:16] + I_Src1ValueV[31:16]), (I_Src1ValueV[15:0] + I_Src1ValueV[15:0])};
+				O_ALUOutV  <= {(I_Src1ValueV[63:48] + I_Src1ValueV[63:48]), 
+				               (I_Src1ValueV[47:32] + I_Src1ValueV[47:32]), 
+									(I_Src1ValueV[31:16] + I_Src1ValueV[31:16]), 
+									(I_Src1ValueV[15:0]  + I_Src1ValueV[15:0] )};
 				O_DestRegIdxV <= I_DestRegIdxV;
 			end
 			`OP_VMOV:
 			begin
-				O_DestValueV  <= I_DestValueV;
+				O_ALUOutV     <= I_DestValueV;
 				O_DestRegIdxV <= I_DestRegIdxV;
 			end
 			`OP_VMOVI:
 			begin
-				O_DestValueV  <= {I_Imm, I_Imm, I_Imm, I_Imm};
+				O_ALUOutV     <= I_DestValueV;
 				O_DestRegIdxV <= I_DestRegIdxV;
 			end
-			`OP_VCOMPMOV:
+			`OP_VCOMPMOV: // dest[idx] <- src
 			begin
-				O_DestValue       <= I_DestValue;
+				O_ALUOut          <= I_DestValue; // scalar
 				O_DestRegIdxV_Idx <= I_DestRegIdxV_Idx;
 				O_DestRegIdxV     <= I_DestRegIdxV;
 			end
-			`OP_VCOMPMOVI:
+			`OP_VCOMPMOVI: // dest[idx] <- imm16
 			begin
-				O_Imm             <= I_Imm;
+				O_ALUOut          <= $signed(I_Imm);
 				O_DestRegIdxV_Idx <= I_DestRegIdxV_Idx;
 				O_DestRegIdxV     <= I_DestRegIdxV;
 			end

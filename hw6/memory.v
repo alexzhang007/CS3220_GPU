@@ -3,23 +3,53 @@
 module Memory(
   I_CLOCK,
   I_LOCK,
-  I_ALUOut,
-  I_Opcode,
-  I_DestRegIdx,
-  I_DestValue,
+  
   I_FetchStall,
   I_DepStall,
+  
+  I_Opcode,
+  
+  I_ALUOut,
+  
+  I_DestRegIdx,
+  I_DestValue,
+  
+  I_ALUOutV,
+  
+  I_DestRegIdxV,
+  I_DestRegIdxV_Idx,
+  I_DestValueV,
+  
+  I_Type,
+
   O_LOCK,
-  O_ALUOut,
-  O_Opcode,
-  O_MemOut,
-  O_DestRegIdx,
+  
   O_BranchPC,
   O_BranchAddrSelect,
+  
+  O_Opcode,
+  
+  O_MemOut,
+  
+  // scalar out
+  O_ALUOut,
+  O_DestValue,
+  O_DestRegIdx,
+  
+  // vector out
+  O_ALUOutV,
+  O_DestValueV,
+  O_DestRegIdxV,
+  O_DestRegIdxV_Idx,
+  
+  O_Type,
+  
   O_FetchStall,
   O_DepStall,
+  
   O_LEDR,
   O_LEDG,
+  
   O_HEX0,
   O_HEX1,
   O_HEX2,
@@ -130,7 +160,27 @@ begin
 				O_BranchPC <= I_ALUOut;
 				O_BranchAddrSelect <= 1'b1;
 			end
-			default:   O_BranchAddrSelect <= 1'b0;
+			// vector
+			`OP_VADD, `OP_VMOV, `OP_VMOVI:
+			begin
+				O_ALUOutV     <= I_ALUOutV;
+				O_DestRegIdxV <= I_DestRegIdxV;
+			end
+			`OP_VCOMPMOV, `OP_VCOMPMOVI: // dest[idx] <- imm16
+			begin
+				O_ALUOut          <= I_ALUOut;
+				O_DestRegIdxV_Idx <= I_DestRegIdxV_Idx;
+				O_DestRegIdxV     <= I_DestRegIdxV;
+			end
+			// GPU 
+			`OP_SETVERTEX, `OP_SETCOLOR, `OP_ROTATE, `OP_TRANSLATE, `OP_SCALE:
+			begin
+				O_DestValueV <= I_DestValueV;
+			end
+			`OP_BEGINPRIMITIVE:
+			begin
+				O_Type <= I_Type;
+			end
 		endcase
 		
 		// $display("[END]       O_BranchPC=%d\n",O_BranchPC);
