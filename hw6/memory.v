@@ -123,48 +123,46 @@ begin
     	 
 	 if (I_FetchStall==1'b0 && I_DepStall==1'b0) begin
 		
-		O_Opcode <= I_Opcode;
+		O_Opcode   <= I_Opcode;
 		O_DepStall <= 1'b0;
 		
 		// $display("[BEGINNING] O_BranchPC=%d",O_BranchPC);
 		
 		case (I_Opcode)
-			`OP_ADD_D, `OP_ADDI_D, `OP_AND_D, `OP_ANDI_D, `OP_MOV, `OP_MOVI_D:
+			`OP_ADD_D, `OP_ADDI_D, `OP_ADDI_F, `OP_AND_D, `OP_ANDI_D, `OP_MOV, `OP_MOVI_D, `OP_MOVI_F:
 			begin
-				O_DestRegIdx <= I_DestRegIdx;
-				O_ALUOut <= I_ALUOut;
+				O_DestRegIdx       <= I_DestRegIdx;
+				O_ALUOut           <= I_ALUOut;
 				O_BranchAddrSelect <= 1'b0;
 			end
 			`OP_LDW:
 			begin
-				O_MemOut <= DataMem[I_ALUOut]; // I_ALUOut = base + offset
-				O_DestRegIdx <= I_DestRegIdx;
+				O_MemOut           <= DataMem[I_ALUOut]; // I_ALUOut = base + offset
+				O_DestRegIdx       <= I_DestRegIdx;
 				O_BranchAddrSelect <= 1'b0;
 			end
 			`OP_STW:
 			begin
-				DataMem[I_ALUOut] <= I_DestValue;  // I_DestValue = base + offset
+				DataMem[I_ALUOut]  <= I_DestValue;  // I_DestValue = base + offset
 				O_BranchAddrSelect <= 1'b0;
 			end
 			`OP_BRN, `OP_BRZ, `OP_BRP, `OP_BRNZ, `OP_BRZP, `OP_BRNP, `OP_BRNZP, `OP_JMP:
 			begin
-				// $display("[BEFORE]    O_BranchPC=%d",O_BranchPC);
-				O_BranchPC <= I_ALUOut;
-				// $display("[AFTER]     O_BranchPC=%d",O_BranchPC);
+				O_BranchPC         <= I_ALUOut;
 				O_BranchAddrSelect <= 1'b1;
 			end
 			`OP_JSR, `OP_JSRR:
 			begin
-				O_DestRegIdx <= I_DestRegIdx;
-				O_ALUOut <= I_DestValue;
-				O_BranchPC <= I_ALUOut;
+				O_DestRegIdx       <= I_DestRegIdx;
+				O_ALUOut           <= I_DestValue;
+				O_BranchPC         <= I_ALUOut;
 				O_BranchAddrSelect <= 1'b1;
 			end
 			// vector
 			`OP_VADD, `OP_VMOV, `OP_VMOVI:
 			begin
-				O_ALUOutV     <= I_ALUOutV;
-				O_DestRegIdxV <= I_DestRegIdxV;
+				O_ALUOutV         <= I_ALUOutV;
+				O_DestRegIdxV     <= I_DestRegIdxV;
 			end
 			`OP_VCOMPMOV, `OP_VCOMPMOVI: // dest[idx] <- imm16
 			begin
@@ -175,18 +173,18 @@ begin
 			// GPU 
 			`OP_SETVERTEX, `OP_SETCOLOR, `OP_ROTATE, `OP_TRANSLATE, `OP_SCALE:
 			begin
-				O_DestValueV <= I_DestValueV;
+				O_DestValueV     <= I_DestValueV;
 			end
 			`OP_BEGINPRIMITIVE:
 			begin
-				O_Type <= I_Type;
+				O_Type           <= I_Type;
 			end
 		endcase
 		
 		// $display("[END]       O_BranchPC=%d\n",O_BranchPC);
 		
 	 end // if (I_FetchStall==1'b0 && I_DepStall==1'b0)
-	 else O_DepStall <= 1'b1;
+	 else O_DepStall    <= 1'b1;
 	 
   end else // if (I_LOCK == 1'b1)
   begin

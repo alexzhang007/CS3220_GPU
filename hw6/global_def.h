@@ -4,7 +4,7 @@
 
 `define BUS_WIDTH 32
 
-`define REG_WIDTH 16
+`define REG_WIDTH  16
 `define VREG_WIDTH 64
 
 `define PC_WIDTH 16 
@@ -18,6 +18,8 @@
 `define DATA_WIDTH 16
 `define INST_MEM_SIZE 1024 
 `define DATA_MEM_SIZE 1024
+
+`define MATRIX_SIZE 256
 
 // for bitshifting
 `define VDEST0 0
@@ -100,11 +102,15 @@
 
 //identity matrix
 // 1 in 1.8.7 format is 1<<7 = b0000 0000 1000 0000 = 0x0080
-// [ 1 0 0 0 ]
-// | 0 1 0 0 |
-// | 0 0 1 0 |
-// [ 0 0 0 1 ]
+// [ [ 15:0  ] [ 31:16 ] [ 47:32 ] [ 63:48 ] ]			[ 1 0 0 0 ]
+// | [ 79:64 ] [ 95:80 ] [111:96 ] [127:112] |			| 0 1 0 0 |
+// | [143:128] [159:144] [175:160] [191:176] |			| 0 0 1 0 |
+// [ [207:192] [223:208] [239:224] [255:240] ]			[ 0 0 0 1 ]
+
 `define  ID_MATRIX 256'h0080000000000000000000800000000000000000008000000000000000000080
+
 
 // vertex vector
 `define  VERTEX_INIT   64'h0000000000000000
+
+`define  FIXED_POINT_1 16'b0000000010000000

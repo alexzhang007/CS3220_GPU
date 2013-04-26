@@ -133,12 +133,15 @@ begin
 		  `OP_ANDI_D: O_ALUOut <= I_Src1Value & $signed(I_Imm);
 		  `OP_MOV:    O_ALUOut <= I_Src2Value;	
 		  `OP_MOVI_D: O_ALUOut <= $signed(I_Imm);
-		  `OP_LDW: O_ALUOut <= I_Src1Value + $signed(I_Imm);
-		  `OP_STW: O_ALUOut <= I_Src1Value + $signed(I_Imm);    
+		  `OP_ADD_F:  O_ALUOut <= I_Src1Value + I_Src2Value;
+		  `OP_ADD_F:  O_ALUOut <= I_Src1Value + I_Imm;
+		  `OP_MOVI_F: O_ALUOut <= I_Imm;
+		  `OP_LDW: O_ALUOut    <= I_Src1Value + $signed(I_Imm);
+		  `OP_STW: O_ALUOut    <= I_Src1Value + $signed(I_Imm);    
 		  `OP_BRN, `OP_BRZ, `OP_BRP, `OP_BRNZ, `OP_BRZP, `OP_BRNP, `OP_BRNZP: O_ALUOut <= I_PC + $signed(I_Imm);
-		  `OP_JSR: O_ALUOut <= I_PC + $signed(I_Imm);
-		  `OP_JMP: O_ALUOut <= I_DestValue;
-		  `OP_JSRR: O_ALUOut <= I_DestValue;
+		  `OP_JSR: O_ALUOut    <= I_PC + $signed(I_Imm);
+		  `OP_JMP: O_ALUOut    <= I_DestValue;
+		  `OP_JSRR: O_ALUOut   <= I_DestValue;
 		  // vector
 		  //
 		  // [ elmt0 ] => [ 15:0  ]

@@ -1,0 +1,255 @@
+# Reading C:/altera/12.1/modelsim_ase/tcl/vsim/pref.tcl 
+# do lg_highlevel_run_msim_rtl_verilog.do 
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Copying c:\altera\12.1\modelsim_ase\win32aloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# ** Warning: Copied c:\altera\12.1\modelsim_ase\win32aloem/../modelsim.ini to modelsim.ini.
+#          Updated modelsim.ini.
+# 
+# vlog -vlog01compat -work work +incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly {C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/seven_segment.v}
+# Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+# -- Compiling module SevenSeg
+# 
+# Top level modules:
+# 	SevenSeg
+# vlog -vlog01compat -work work +incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly {C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/sign_extension.v}
+# Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+# -- Compiling module SignExtension
+# 
+# Top level modules:
+# 	SignExtension
+# vlog -vlog01compat -work work +incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly {C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/pll.v}
+# Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+# -- Compiling module pll
+# 
+# Top level modules:
+# 	pll
+# vlog -vlog01compat -work work +incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly {C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/writeback.v}
+# Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+# -- Compiling module Writeback
+# 
+# Top level modules:
+# 	Writeback
+# vlog -vlog01compat -work work +incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly {C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v}
+# Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+# -- Compiling module Memory
+# 
+# Top level modules:
+# 	Memory
+# vlog -vlog01compat -work work +incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly {C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/execute.v}
+# Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+# -- Compiling module Execute
+# 
+# Top level modules:
+# 	Execute
+# vlog -vlog01compat -work work +incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly {C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/decode.v}
+# Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+# -- Compiling module Decode
+# 
+# Top level modules:
+# 	Decode
+# vlog -vlog01compat -work work +incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly {C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v}
+# Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+# -- Compiling module lg_highlevel
+# 
+# Top level modules:
+# 	lg_highlevel
+# vlog -vlog01compat -work work +incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly {C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/fetch.v}
+# Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+# -- Compiling module Fetch
+# 
+# Top level modules:
+# 	Fetch
+# 
+# vlog -vlog01compat -work work +incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly {C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v}
+# Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+# -- Compiling module lg_highlevel
+# 
+# Top level modules:
+# 	lg_highlevel
+# 
+# vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneii_ver -L rtl_work -L work -voptargs="+acc"  lg_highlevel
+# vsim -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneii_ver -L rtl_work -L work -voptargs=\"+acc\" -t 1ps lg_highlevel 
+# Loading work.lg_highlevel
+# Loading work.pll
+# Loading altera_mf_ver.altpll
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.pll_iobuf
+# Loading work.Fetch
+# Loading work.Decode
+# Loading work.SignExtension
+# Loading work.Execute
+# Loading work.Memory
+# Loading work.SevenSeg
+# Loading work.Writeback
+# Loading altera_mf_ver.MF_stratixii_pll
+# Loading altera_mf_ver.MF_pll_reg
+# Loading altera_mf_ver.arm_m_cntr
+# Loading altera_mf_ver.arm_n_cntr
+# Loading altera_mf_ver.arm_scale_cntr
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/decode.v(515): [PCDPC] - Port size (32 or 32) does not match connection size (16) for port 'Out'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/sign_extension.v(3).
+# 
+#         Region: /lg_highlevel/Decode0/SE0
+# ** Warning: (vsim-3017) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(237): [TFMPC] - Too few port connections. Expected 29, found 25.
+# 
+#         Region: /lg_highlevel/Execute0
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(237): [TFMPC] - Missing connection for port 'O_ALUOutV'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(237): [TFMPC] - Missing connection for port 'O_DestValueV'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(237): [TFMPC] - Missing connection for port 'O_DestRegIdxV'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(237): [TFMPC] - Missing connection for port 'O_DestRegIdxV_Idx'.
+# 
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(274): [PCDPC] - Port size (64 or 64) does not match connection size (1) for port 'O_ALUOutV'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v(39).
+# 
+#         Region: /lg_highlevel/Memory0
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(274): [PCDPC] - Port size (64 or 64) does not match connection size (1) for port 'O_DestValueV'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v(40).
+# 
+#         Region: /lg_highlevel/Memory0
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(274): [PCDPC] - Port size (6 or 6) does not match connection size (1) for port 'O_DestRegIdxV'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v(41).
+# 
+#         Region: /lg_highlevel/Memory0
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(274): [PCDPC] - Port size (2 or 2) does not match connection size (1) for port 'O_DestRegIdxV_Idx'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v(42).
+# 
+#         Region: /lg_highlevel/Memory0
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(274): [PCDPC] - Port size (4 or 4) does not match connection size (1) for port 'O_Type'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v(44).
+# 
+#         Region: /lg_highlevel/Memory0
+# ** Warning: (vsim-3017) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Too few port connections. Expected 20, found 15.
+# 
+#         Region: /lg_highlevel/Writeback0
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Missing connection for port 'I_ALUOutV'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Missing connection for port 'I_DestRegIdxV'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Missing connection for port 'I_DestRegIdxV_Idx'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Missing connection for port 'O_FetchStall'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Missing connection for port 'O_DepStall'.
+# 
+# 
+# do C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/simulation/modelsim/my_custom_view.do
+# do wave.do
+# ** Error: Cannot open macro file: wave.do
+# Error in macro C:\Users\Chris\Dropbox\GitHub\CS3220_GPU\hw6_cpuonly\simulation\modelsim\my_custom_view.do line 1
+# Cannot open macro file: wave.do
+#     while executing
+# "do wave.do"
+add wave -position insertpoint  \
+sim:/lg_highlevel/Decode0/RF \
+sim:/lg_highlevel/Decode0/VRF \
+sim:/lg_highlevel/Decode0/ConditionalCode
+restart -f
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/decode.v(515): [PCDPC] - Port size (32 or 32) does not match connection size (16) for port 'Out'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/sign_extension.v(3).
+# 
+#         Region: /lg_highlevel/Decode0/SE0
+# ** Warning: (vsim-3017) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(237): [TFMPC] - Too few port connections. Expected 29, found 25.
+# 
+#         Region: /lg_highlevel/Execute0
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(237): [TFMPC] - Missing connection for port 'O_ALUOutV'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(237): [TFMPC] - Missing connection for port 'O_DestValueV'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(237): [TFMPC] - Missing connection for port 'O_DestRegIdxV'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(237): [TFMPC] - Missing connection for port 'O_DestRegIdxV_Idx'.
+# 
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(274): [PCDPC] - Port size (64 or 64) does not match connection size (1) for port 'O_ALUOutV'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v(39).
+# 
+#         Region: /lg_highlevel/Memory0
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(274): [PCDPC] - Port size (64 or 64) does not match connection size (1) for port 'O_DestValueV'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v(40).
+# 
+#         Region: /lg_highlevel/Memory0
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(274): [PCDPC] - Port size (6 or 6) does not match connection size (1) for port 'O_DestRegIdxV'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v(41).
+# 
+#         Region: /lg_highlevel/Memory0
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(274): [PCDPC] - Port size (2 or 2) does not match connection size (1) for port 'O_DestRegIdxV_Idx'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v(42).
+# 
+#         Region: /lg_highlevel/Memory0
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(274): [PCDPC] - Port size (4 or 4) does not match connection size (1) for port 'O_Type'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v(44).
+# 
+#         Region: /lg_highlevel/Memory0
+# ** Warning: (vsim-3017) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Too few port connections. Expected 20, found 15.
+# 
+#         Region: /lg_highlevel/Writeback0
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Missing connection for port 'I_ALUOutV'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Missing connection for port 'I_DestRegIdxV'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Missing connection for port 'I_DestRegIdxV_Idx'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Missing connection for port 'O_FetchStall'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Missing connection for port 'O_DepStall'.
+# 
+run -all
+#  Note : Cyclone II PLL is enabled
+# Time: 0  Instance: lg_highlevel.pll0.altpll_component.stratixii_pll.pll1
+#  Note : Cyclone II PLL locked to incoming clock
+# Time: 240000  Instance: lg_highlevel.pll0.altpll_component.stratixii_pll.pll1
+# ** Note: $finish    : C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(78)
+#    Time: 10 us  Iteration: 0  Instance: /lg_highlevel
+# 1
+# Break in Module lg_highlevel at C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v line 78
+add wave -position insertpoint  \
+sim:/lg_highlevel/test_clock
+add wave -position insertpoint  \
+sim:/lg_highlevel/pll_locked
+restart -f
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/decode.v(515): [PCDPC] - Port size (32 or 32) does not match connection size (16) for port 'Out'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/sign_extension.v(3).
+# 
+#         Region: /lg_highlevel/Decode0/SE0
+# ** Warning: (vsim-3017) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(237): [TFMPC] - Too few port connections. Expected 29, found 25.
+# 
+#         Region: /lg_highlevel/Execute0
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(237): [TFMPC] - Missing connection for port 'O_ALUOutV'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(237): [TFMPC] - Missing connection for port 'O_DestValueV'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(237): [TFMPC] - Missing connection for port 'O_DestRegIdxV'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(237): [TFMPC] - Missing connection for port 'O_DestRegIdxV_Idx'.
+# 
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(274): [PCDPC] - Port size (64 or 64) does not match connection size (1) for port 'O_ALUOutV'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v(39).
+# 
+#         Region: /lg_highlevel/Memory0
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(274): [PCDPC] - Port size (64 or 64) does not match connection size (1) for port 'O_DestValueV'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v(40).
+# 
+#         Region: /lg_highlevel/Memory0
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(274): [PCDPC] - Port size (6 or 6) does not match connection size (1) for port 'O_DestRegIdxV'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v(41).
+# 
+#         Region: /lg_highlevel/Memory0
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(274): [PCDPC] - Port size (2 or 2) does not match connection size (1) for port 'O_DestRegIdxV_Idx'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v(42).
+# 
+#         Region: /lg_highlevel/Memory0
+# ** Warning: (vsim-3015) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(274): [PCDPC] - Port size (4 or 4) does not match connection size (1) for port 'O_Type'. The port definition is at: C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v(44).
+# 
+#         Region: /lg_highlevel/Memory0
+# ** Warning: (vsim-3017) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Too few port connections. Expected 20, found 15.
+# 
+#         Region: /lg_highlevel/Writeback0
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Missing connection for port 'I_ALUOutV'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Missing connection for port 'I_DestRegIdxV'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Missing connection for port 'I_DestRegIdxV_Idx'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Missing connection for port 'O_FetchStall'.
+# 
+# ** Warning: (vsim-3722) C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(292): [TFMPC] - Missing connection for port 'O_DepStall'.
+# 
+run -all
+#  Note : Cyclone II PLL is enabled
+# Time: 0  Instance: lg_highlevel.pll0.altpll_component.stratixii_pll.pll1
+#  Note : Cyclone II PLL locked to incoming clock
+# Time: 240000  Instance: lg_highlevel.pll0.altpll_component.stratixii_pll.pll1
+# ** Note: $finish    : C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v(78)
+#    Time: 10 us  Iteration: 0  Instance: /lg_highlevel
+# 1
+# Break in Module lg_highlevel at C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v line 78

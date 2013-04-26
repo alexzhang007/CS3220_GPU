@@ -1,0 +1,192 @@
+m255
+K3
+13
+cModel Technology
+Z0 dC:\Users\Chris\Dropbox\GitHub\CS3220_GPU\hw6_cpuonly\simulation\modelsim
+vDecode
+IE?03al8cNJ78Cbc@X2T3a2
+V@K[eNOj?ME:Xez>9jP>Q`3
+Z1 dC:\Users\Chris\Dropbox\GitHub\CS3220_GPU\hw6_cpuonly\simulation\modelsim
+w1366951062
+8C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/decode.v
+FC:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/decode.v
+L0 3
+Z2 OV;L;10.1b;51
+r1
+31
+Z3 o-vlog01compat -work work -O0
+Z4 !s92 -vlog01compat -work work +incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly -O0
+n@decode
+!i10b 1
+!s100 V386gE1[:N[EAXBLcBjaH3
+!s85 0
+!s108 1366951788.190000
+!s107 C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/global_def.h|C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/decode.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly|C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/decode.v|
+!s101 -O0
+vExecute
+IM@WXHF4kgbSg^H;;MC@<i1
+V4eabA=N4nW=bZ<=c[J_Ro1
+R1
+w1366950470
+8C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/execute.v
+FC:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/execute.v
+L0 3
+R2
+r1
+31
+R3
+R4
+n@execute
+!i10b 1
+!s100 JHiP8[VofXU7L4_BmYh`g0
+!s85 0
+!s108 1366951787.941000
+!s107 C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/global_def.h|C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/execute.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly|C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/execute.v|
+!s101 -O0
+vFetch
+I4OMPokm9TIdmUG4cghJLn1
+VjL8k?<4jZBi6:U1zF0H=Y0
+R1
+w1366949280
+8C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/fetch.v
+FC:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/fetch.v
+L0 3
+R2
+r1
+31
+R3
+R4
+n@fetch
+!i10b 1
+!s100 >=>K5>=eoZMgH6mOOFSOT1
+!s85 0
+!s108 1366951789.684000
+!s107 C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/global_def.h|C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/fetch.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly|C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/fetch.v|
+!s101 -O0
+vlg_highlevel
+!i10b 1
+!s100 0RB1Njjb^zClLZjdE]Fek0
+IFg:o4TGhI;n:^[C2kQ3=>0
+VfAjAf@JG_B?@k;^IY[70@1
+R1
+w1366951283
+8C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v
+FC:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v
+L0 5
+R2
+r1
+!s85 0
+31
+!s108 1366951790.274000
+!s107 C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/global_def.h|C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly|C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/lg_highlevel.v|
+!s101 -O0
+R3
+R4
+vMemory
+Ie3lXGdkm>odD@niKB=nPU2
+VK62m<4kMWC;h8;VfNTc812
+R1
+w1366950452
+8C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v
+FC:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v
+L0 3
+R2
+r1
+31
+R3
+R4
+n@memory
+!i10b 1
+!s100 :JjhOkT<VAzK6Y5Z6Az^V1
+!s85 0
+!s108 1366951787.594000
+!s107 C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/global_def.h|C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly|C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/memory.v|
+!s101 -O0
+vpll
+IE6R9nJ8M6T5WG`_bkI6A31
+V[PnaR_FLzVi3KU;W^`bE_1
+R1
+Z5 w1366060212
+8C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/pll.v
+FC:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/pll.v
+L0 39
+R2
+r1
+31
+R3
+R4
+!i10b 1
+!s100 MNC;NEi@QGU9i`9eAaW=F2
+!s85 0
+!s108 1366951786.458000
+!s107 C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/pll.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly|C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/pll.v|
+!s101 -O0
+vSevenSeg
+IOGzk?WGfK7J6XIX_UPAX[0
+VE>VAWodAcA0XbzQM`Nba60
+R1
+R5
+8C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/seven_segment.v
+FC:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/seven_segment.v
+L0 1
+R2
+r1
+31
+R3
+n@seven@seg
+R4
+!i10b 1
+!s100 XJf0Q^SDa<<ek;iMh4iL^1
+!s85 0
+!s108 1366951785.929000
+!s107 C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/seven_segment.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly|C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/seven_segment.v|
+!s101 -O0
+vSignExtension
+I5l`ATKnHmkaR:8ig9zPQ]0
+Vl2bD2B8b=WZP:Ln<Y3WeY3
+R1
+R5
+8C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/sign_extension.v
+FC:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/sign_extension.v
+L0 1
+R2
+r1
+31
+R3
+R4
+n@sign@extension
+!i10b 1
+!s100 Gjm0W_zA^Eml`>k;TbEJ53
+!s85 0
+!s108 1366951786.174000
+!s107 C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/sign_extension.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly|C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/sign_extension.v|
+!s101 -O0
+vWriteback
+IWOOYE:=bMf`zZfoMYXEMk0
+VPYF1GJfPQ36R[LZmAJKG60
+R1
+w1366950098
+8C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/writeback.v
+FC:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/writeback.v
+L0 3
+R2
+r1
+31
+R3
+R4
+n@writeback
+!i10b 1
+!s100 00j8kBU@VMi]8P7AWXVz@0
+!s85 0
+!s108 1366951786.682000
+!s107 C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/global_def.h|C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/writeback.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly|C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/writeback.v|
+!s101 -O0

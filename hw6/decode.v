@@ -223,6 +223,19 @@ assign __DepStallSignal =
 		(I_IR[31:24] == `OP_MOVI_D ) ? (1'b0) : // no dependency
 	   (I_IR[31:24] == `OP_JSR    ) ? (1'b0) : // no dependency
 		
+		// fixed point operations
+		(I_IR[31:24] == `OP_ADD_F) ? (
+			(I_WriteBackEnable == 1'b1) ? (
+					!( ((RF_VALID|((16'b0000000000000001)<<I_WriteBackRegIdx)) & (16'b0000000000000001<<I_IR[19:16])) && ((RF_VALID|((16'b0000000000000001)<<I_WriteBackRegIdx)) &  (16'b0000000000000001<<I_IR[11:8])) )
+					) : !( (RF_VALID & (16'b0000000000000001<<I_IR[19:16])) && (RF_VALID &  (16'b0000000000000001<<I_IR[11:8])) )
+		) : 
+		(I_IR[31:24] == `OP_ADDI_F) ? (
+			(I_WriteBackEnable == 1'b1) ? (
+					!((RF_VALID|((16'b0000000000000001)<<I_WriteBackRegIdx)) & (16'b0000000000000001<<I_IR[19:16]))
+					) : !( RF_VALID & (16'b0000000000000001<<I_IR[19:16]))
+		) :
+		(I_IR[31:24] == `OP_MOVI_D ) ? (1'b0) : // no dependency
+		
 		// vector operations
 		(I_IR[31:24] == `OP_VADD) ? (
 			(I_WriteBackEnableV == 1'b1) ? (
@@ -315,9 +328,16 @@ always @(posedge I_CLOCK) begin
   if (I_LOCK == 1'b1) begin
    
 	// if both enable signals are on, the WriteBack is signaled by 
-	// VCOMPMOV or VCOMPMOVI
-	if ((I_WriteBackEnable==1'b1) && (I_WriteBackEnableV==1'b1)) begin
-		VRF[I_WriteBackRegIdxV][I_WriteBackRegIdxV_Idx] <= I_WriteBackData;
+	
+	if (I_WriteBackEnableV==1'b1) begin
+		// VCOMPMOV or VCOMPMOVI
+		if (I_WriteBackEnable==1'b1) VRF[I_WriteBackRegIdxV][I_WriteBackRegIdxV_Idx] <= I_WriteBackData;
+		else VRF[I_WriteBackRegIdxV] <= I_WriteBackDataV;
+		
+		if      (I_WriteBackData[14:0]==15'b000000000000000) ConditionalCode = 3'b010; // CC = Z
+		else if (I_WriteBackData[15]==1'b1)                  ConditionalCode = 3'b100; // CC = N
+		else                                                 ConditionalCode = 3'b001; // CC = P
+		
 	end
 	else if (I_WriteBackEnable==1'b1) begin 
 		
@@ -367,14 +387,14 @@ begin
 			O_FetchStall <= 1'b0;
 			
 			case(I_IR[31:24])
-			`OP_ADD_D, `OP_AND_D: // check [19:16], [11:8]
+			`OP_ADD_D, `OP_AND_D, `OP_ADD_F: // check [19:16], [11:8]
 			begin
 				O_Src1Value <= RF[I_IR[19:16]];
 				O_Src2Value <= RF[I_IR[11:8]];
 				O_DestRegIdx <= I_IR[23:20];
 				RF_VALID = (RF_VALID & ~((16'b1)<<I_IR[23:20]));
 			end // end case `OP_ADD_D, `OP_AND_D
-			`OP_ADDI_D, `OP_ANDI_D, `OP_LDW:  // check [19:16]
+			`OP_ADDI_D, `OP_ANDI_D, `OP_ADDI_F, `OP_LDW:  // check [19:16]
 			begin
 				O_Src1Value <= RF[I_IR[19:16]];
 				O_Imm <= $signed(Imm32);
@@ -393,6 +413,12 @@ begin
 				O_DestRegIdx <= I_IR[19:16];
 				RF_VALID = (RF_VALID & ~((16'b1)<<I_IR[19:16]));
 			end // end case `OP_MOVI_D
+			`OP_MOVI_F:  
+			begin
+				O_Imm <= I_Imm;
+				O_DestRegIdx <= I_IR[19:16];
+				RF_VALID = (RF_VALID & ~((16'b1)<<I_IR[19:16]));
+			end // end case `OP_MOVI_F
 			`OP_STW:  // check [23:20], [19:16]
 			begin
 				O_DestValue <= RF[I_IR[23:20]];
@@ -401,8 +427,8 @@ begin
 			end // end case `OP_STW
 			`OP_JSR:  
 			begin
-				O_Imm <= $signed(Imm32<<2);
-				O_DestValue <= I_PC;
+				O_Imm        <= $signed(Imm32<<2);
+				O_DestValue  <= I_PC;
 				O_DestRegIdx <= 4'h7;
 				RF_VALID = ( RF_VALID & ~(16'b0000000010000000) ); // invalidate R7
 			end // end case `OP_JSR
@@ -412,7 +438,7 @@ begin
 			end // end case `OP_JMP
 			`OP_JSRR: // check [19:16]
 			begin
-				O_DestValue <= I_PC; // next PC
+				O_DestValue  <= I_PC; // next PC
 				O_DestRegIdx <= 4'h7;
 				RF_VALID = ( RF_VALID & ~(16'b0000000010000000) ); // invalidate R7
 			end // end case `OP_JSRR
@@ -435,20 +461,21 @@ begin
 			end
 			`OP_VMOVI:
 			begin
-				O_Imm <= $signed(Imm32);
+				// O_Imm <= I_Imm;
+				O_DestValueV  <= {I_Imm, I_Imm, I_Imm, I_Imm};
 				O_DestRegIdxV <= I_IR[21:16];
 				VRF_VALID = (VRF_VALID & ~((64'b1)<<I_IR[21:16]));
 			end
 			`OP_VCOMPMOV:
 			begin
-				O_DestValue <= RF[I_IR[11:8]];
+				O_DestValue       <= RF[I_IR[11:8]];
 				O_DestRegIdxV_Idx <= I_IR[23:22];
 				O_DestRegIdxV     <= I_IR[21:16];
 				VRF_VALID = (VRF_VALID & ~((64'b1)<<I_IR[21:16]));
 			end
 			`OP_VCOMPMOVI:
 			begin
-				O_Imm <= $signed(Imm32);
+				O_Imm <= I_Imm;
 				O_DestRegIdxV_Idx <= I_IR[23:22];
 				O_DestRegIdxV     <= I_IR[21:16];
 				VRF_VALID = (VRF_VALID & ~((64'b1)<<I_IR[21:16]));

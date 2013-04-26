@@ -76,6 +76,10 @@ assign O_WriteBackEnable =
 	   (I_Opcode == `OP_LDW    ) ? (1'b1) :
 	   (I_Opcode == `OP_JSR    ) ? (1'b1) : 
       (I_Opcode == `OP_JSRR   ) ? (1'b1) : 
+		// fixed point operations
+		(I_Opcode == `OP_ADD_F   ) ? (1'b1) :
+		(I_Opcode == `OP_ADDI_F  ) ? (1'b1) :
+		(I_Opcode == `OP_MOVI_F  ) ? (1'b1) :
 		// vector operaitons
 		(I_Opcode == `OP_VCOMPMOV  ) ? (1'b1) : 
 	   (I_Opcode == `OP_VCOMPMOVI ) ? (1'b1) : 
@@ -95,7 +99,11 @@ assign O_WriteBackRegIdx =
 		(I_Opcode == `OP_MOVI_D ) ? (I_DestRegIdx) :
 		(I_Opcode == `OP_LDW    ) ? (I_DestRegIdx) :
 		(I_Opcode == `OP_JSR    ) ? (I_DestRegIdx) : 
-		(I_Opcode == `OP_JSRR   ) ? (I_DestRegIdx) :  
+		(I_Opcode == `OP_JSRR   ) ? (I_DestRegIdx) :
+		// fixed point operations
+		(I_Opcode == `OP_ADD_F   ) ? (I_DestRegIdx) :
+		(I_Opcode == `OP_ADDI_F  ) ? (I_DestRegIdx) :
+		(I_Opcode == `OP_MOVI_F  ) ? (I_DestRegIdx) :
         (4'hX)
     ): (4'hX)):
 	 (4'hX));
@@ -113,6 +121,11 @@ assign O_WriteBackData =
 		(I_Opcode == `OP_LDW   ) ? (I_MemOut) :
 		(I_Opcode == `OP_JSR   ) ? (I_ALUOut) :
 		(I_Opcode == `OP_JSRR  ) ? (I_ALUOut) :
+		
+		// fixed point operations
+		(I_Opcode == `OP_ADD_F   ) ? (I_ALUOut) :
+		(I_Opcode == `OP_ADDI_F  ) ? (I_ALUOut) :
+		(I_Opcode == `OP_MOVI_F  ) ? (I_ALUOut) :
 		
 		// below operations depend on both WritebackEnableV and WritebackEnable
 		(I_Opcode == `OP_VCOMPMOV  ) ? (I_ALUOut) :

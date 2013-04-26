@@ -1,0 +1,54 @@
+Quartus II Archive log --	C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly.qarlog
+
+Archive:	C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly.qar
+Date:		Thu Apr 25 22:48:09 2013
+Quartus II 32-bit		12.1 Build 177 11/07/2012 SJ Web Edition
+
+	=========== Files Selected: ===========
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/__lg_highlevel.auto.qarlog
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/assignment_defaults.qdf
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/cosine_table.hex
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/data.hex
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/decode.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/execute.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/fetch.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/geometry.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/global_def.h
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/gpu.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/incremental_db/compiled_partitions/lg_highlevel.db_info
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/lg_highlevel.qpf
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/lg_highlevel.qsf
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/lg_highlevel.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/memory.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/multi_sram.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/output_files/lg_highlevel.archive.rpt
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/output_files/lg_highlevel.done
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/output_files/lg_highlevel.flow.rpt
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/output_files/lg_highlevel.map.rpt
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/output_files/lg_highlevel.map.smsg
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/output_files/lg_highlevel.map.summary
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/output_files/lg_highlevel.restore.rpt
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/pixel_gen.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/pll.ppf
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/pll.qip
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/pll.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/pll_bb.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/rasterize.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/seven_segment.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/sign_extension.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/simulation/modelsim/my_custom_view.do
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/sine_table.hex
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/test0.hex
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/vertex.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/vga_controller.v
+C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6/writeback.v
+	======= Total: 37 files to archive =======
+
+	================ Status: ===============
+All files archived successfully.
+
+
+******* Archived project restoration attempt on Thu Apr 25 22:48:33 2013
+Source archive file:	C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly.qar
+Archive was extracted into	C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly/
+		 - successfully.

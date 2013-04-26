@@ -55,6 +55,24 @@ output reg O_DepStall;
 reg[`DATA_WIDTH-1:0] SinTable[0:72];
 reg[`DATA_WIDTH-1:0] CosTable[0:72];
 
+reg[`VREG_WIDTH-1:0] Vertex_Array[1:0];
+reg[1:0] Vertex_CurrIdx; // keep track of up to 3 vertices
+reg[1:0] Num_Vertices;   // if Opcode == ENDPRIMITIVE, Num_vertices = Vertex_CurrIdx
+
+// wire[`MATRIX_SIZE-1:0] Vertex_Curr;
+
+// signals
+reg _BeginPrimitive;
+reg _EndPrimitive;
+reg _PushMatrix;
+reg _PopMatrix;
+
+// matrix
+wire [255:0] Matrix_Curr;
+
+reg [1:0] Num_Matrices;
+reg [255:0] MatrixStack [0:1]; 
+
 // angle
 wire [7:0] Angle; // 8 bit integer 
 wire Z_Value; // sign (since it's fixed point, only bit-15 matters)
@@ -63,89 +81,15 @@ wire Z_Value; // sign (since it's fixed point, only bit-15 matters)
 wire[15:0] Sine_Value;   // odd, 
 wire[15:0] Cosine_Value; // even, ignore sine: Theta[14:7]
 
-wire [255:0] Attribute_Matrix;
-wire [255:0] Rotate_Matrix;
-wire [255:0] Scale_Matrix;
-wire [255:0] Translate_Matrix;
-wire [63:0] Vertex_Vector;
+wire [63:0] Vertex_Curr;
+reg  [63:0] Vertex_Array [0:4];
+reg  [4:0]  Num_Vertices;
 
-// set vertices
-wire Triangle1_Set;
-wire Triangle2_Set;
-wire Triangle3_Set;
-
-wire [1:0] Triangle1_Vertex_Count;
-wire [1:0] Triangle2_Vertex_Count;
-wire [1:0] Triangle3_Vertex_Count;
-
-wire [15:0] T1X1;
-wire [15:0] T1Y1;
-wire [15:0] T1Z1;
-wire [15:0] T1X2;
-wire [15:0] T1Y2;
-wire [15:0] T1Z2;
-wire [15:0] T1X3;
-wire [15:0] T1Y3;
-wire [15:0] T1Z3;
-
-wire [15:0] T2X1;
-wire [15:0] T2Y1;
-wire [15:0] T2Z1;
-wire [15:0] T2X2;
-wire [15:0] T2Y2;
-wire [15:0] T2Z2;
-wire [15:0] T2X3;
-wire [15:0] T2Y3;
-wire [15:0] T2Z3;
-
-wire [15:0] T3X1;
-wire [15:0] T3Y1;
-wire [15:0] T3Z1;
-wire [15:0] T3X2;
-wire [15:0] T3Y2;
-wire [15:0] T3Z2;
-wire [15:0] T3X3;
-wire [15:0] T3Y3;
-wire [15:0] T3Z3;
-
+// indices of color array corresponds to that of vertex array
 // set colors
-wire Color1_Set;
-wire Color2_Set;
-wire Color3_Set;
-
-wire [1:0] Color1_Count;
-wire [1:0] Color2_Count;
-wire [1:0] Color3_Count;
-
-wire [11:0] T1C1R;
-wire [11:0] T1C1G;
-wire [11:0] T1C1B;
-wire [11:0] T1C2R;
-wire [11:0] T1C2G;
-wire [11:0] T1C2B;
-wire [11:0] T1C3R;
-wire [11:0] T1C3G;
-wire [11:0] T1C3B;
-
-wire [11:0] T2C1R;
-wire [11:0] T2C1G;
-wire [11:0] T2C1B;
-wire [11:0] T2C2R;
-wire [11:0] T2C2G;
-wire [11:0] T2C2B;
-wire [11:0] T2C3R;
-wire [11:0] T2C3G;
-wire [11:0] T2C3B;
-
-wire [11:0] T3C1R;
-wire [11:0] T3C1G;
-wire [11:0] T3C1B;
-wire [11:0] T3C2R;
-wire [11:0] T3C2G;
-wire [11:0] T3C2B;
-wire [11:0] T3C3R;
-wire [11:0] T3C3G;
-wire [11:0] T3C3B;
+wire [63:0] Color_Curr;
+reg  [63:0] Color_Array [0:4];
+reg  [4:0]  Num_Colors;
 
 // translate
 
@@ -162,13 +106,15 @@ begin
   $readmemh("sine_table.hex", SinTable);
   $readmemh("cosine_table.hex", CosTable);
   
-  Triangle1_Set = 1'b0;
-  Triangle2_Set = 1'b0;
-  Triangle3_Set = 1'b0;
-
-  Triangle1_Vertex_Count = 2'b0;
-  Triangle2_Vertex_Count = 2'b0;
-  Triangle3_Vertex_Count = 2'b0;
+  _BeginPrimitive = 1'b0;
+  _EndPrimitive   = 1'b0;
+  _PushMatrix     = 1'b0;
+  _PopMatrix      = 1'b0;
+  
+  Num_Colors   = 0; 
+  Num_Vertices = 0; 
+  Num_Matrices = 0;
+    
 end
 
 
@@ -184,10 +130,6 @@ end
 // | elmt2 | => | 47:32 |
 // [ elmt3 ] => [ 63:48 ]
 
-// ############
-// ## ROTATE ##		  
-// ############
-
 assign Z_Value = // vr[3]
 	(I_LOCK==1'b1) ? 
 	(
@@ -197,7 +139,7 @@ assign Z_Value = // vr[3]
 			(
 				(I_Opcode==`OP_ROTATE) ? 
 				(
-					I_VR[63]
+					I_VR[63] // assuming that it's the sign bit
 				): (1'bX)	
 			): (1'bX) // end I_DepStall
 		): (1'bX) // end I_FetchStall
@@ -274,7 +216,17 @@ assign Cosine_Value =
 // ## SET VERTICES ##		  
 // ##################
 
-assign T1X1 = 
+// Matrix Assignments
+// 	
+// [ [ 15:0  ] [ 31:16 ] [ 47:32 ] [ 63:48 ] ]
+// | [ 79:64 ] [ 95:80 ] [111:96 ] [127:112] |
+// | [143:128] [159:144] [175:160] [191:176] |
+// [ [207:192] [223:208] [239:224] [255:240] ]
+
+// The value of vr[1]: X coordinate
+// The value of vr[2]: Y coordinate
+// The value of vr[3]: Z coordinate
+assign Vertex_Curr = 
 	(I_LOCK==1'b1) ? 
 	(
 		(I_FetchStall==1'b0) ? 
@@ -283,496 +235,19 @@ assign T1X1 =
 			(
 				(I_Opcode==`OP_SETVERTEX) ? 
 				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[31:16]
-					): T1X1
+					I_VR
 				): (16'hXXXX)	
 			): (16'hXXXX) // end I_DepStall
 		): (16'hXXXX) // end I_FetchStall
 	): (16'hXXXX); // end I_LOCK
 
-assign T1Y1 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[47:32]
-					): T1Y1
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
 
-assign T1Z1 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[63:48]
-					): T1Z1
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T1X2 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[31:16]
-					): T1X2
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T1Y2 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[47:32]
-					): T1Y2
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T1Z2 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[63:48]
-					): T1Z2
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T1X3 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[31:16]
-					): T1X3
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T1Y3 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[47:32]
-					): T1Y3
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T1Z3 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[63:48]
-					): T1Z3
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T2X1 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[31:16]
-					): T2X1
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T2Y1 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[47:32]
-					): T2Y1
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T2Z1 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[63:48]
-					): T2Z1
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T2X2 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[31:16]
-					): T2X2
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T2Y2 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[47:32]
-					): T2Y2
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T2Z2 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[63:48]
-					): T2Z2
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T2X3 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[31:16]
-					): T2X3
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T2Y3 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[47:32]
-					): T2Y3
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T2Z3 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[63:48]
-					): T2Z3
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T3X1 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[31:16]
-					): T3X1
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T3Y1 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[47:32]
-					): T3Y1
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T3Z1 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[63:48]
-					): T3Z1
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T3X2 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[31:16]
-					): T3X2
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T3Y2 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[47:32]
-					): T3Y2
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T3Z2 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[63:48]
-					): T3Z2
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T3X3 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[31:16]
-					): T3X3
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T3Y3 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[47:32]
-					): T3Y3
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-
-assign T3Z3 = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					(Triangle1_Set==1'b0) ?
-					(
-						I_VR[63:48]
-					): T3Z3
-				): (16'hXXXX)	
-			): (16'hXXXX) // end I_DepStall
-		): (16'hXXXX) // end I_FetchStall
-	): (16'hXXXX); // end I_LOCK
-	
-assign Triangle1_Set = (Triangle1_Vertex_Count==3) ? 1 : 0;
-assign Triangle2_Set = (Triangle2_Vertex_Count==3) ? 1 : 0;
-assign Triangle3_Set = (Triangle3_Vertex_Count==3) ? 1 : 0;
-
-assign Triangle1_Vertex_Count = (Triangle1_Set==1) ? 0 : Triangle1_Vertex_Count+1;
-assign Triangle2_Vertex_Count = (Triangle2_Set==1) ? 0 : Triangle2_Vertex_Count+1;
-assign Triangle3_Vertex_Count = (Triangle3_Set==1) ? 0 : Triangle3_Vertex_Count+1;
 
 // ################
 // ## SET COLORS ##		  
 // ################
 
-assign T1C1 = 
+assign Color_Curr = 
 	(I_LOCK==1'b1) ? 
 	(
 		(I_FetchStall==1'b0) ? 
@@ -781,117 +256,89 @@ assign T1C1 =
 			(
 				(I_Opcode==`OP_SETCOLOR) ? 
 				(
-					(Color1_Set==1'b0) ?
-					(
-						I_VR[63:48]
-					): T3Z3
+					I_VR
 				): (16'hXXXX)	
 			): (16'hXXXX) // end I_DepStall
 		): (16'hXXXX) // end I_FetchStall
 	): (16'hXXXX); // end I_LOCK
 
-assign Color1_Set = (Color1_Count==3) ? 1 : 0;
-assign Color2_Set = (Color2_Count==3) ? 1 : 0;
-assign Color3_Set = (Color3_Count==3) ? 1 : 0;
-
-assign [1:0] Color1_Count = (Color1_Set==1) ? 0 : Color1_Set+1;
-assign [1:0] Color2_Count = (Color2_Set==1) ? 0 : Color2_Set+1;
-assign [1:0] Color3_Count = (Color3_Set==1) ? 0 : Color3_Set+1;
 
 // ###############
 // ## TRANSLATE ##		  
 // ###############
 
+// vr[1]=I_VR[31:16]: distance to move on x-axis
+// vr[2]=I_VR[47:32]: distance to move on y-axis
+
+// [ 1   0   0   t_x ]
+// | 0   1   0   t_y |
+// | 0   0   1    0  |
+// [ 0   0   0    1  ] 
+
+assign Matrix_Curr = 
+	(I_LOCK==1'b1) ? 
+	(
+		(I_FetchStall==1'b0) ? 
+		(
+			(I_DepStall==1'b0) ? 
+			(
+				(I_Opcode==`OP_TRANSLATE) ? 
+				(
+					{`FIXED_POINT_1, 16h'0, 16h'0, I_VR[31:16], 16'h0, `FIXED_POINT_1, 16'h0, I_VR[47:32], 16'h0, 16'h0, `FIXED_POINT_1, 16'h0, 16'h0, 16'h0, `FIXED_POINT_1}
+				): (16'hXXXX)	
+			): (16'hXXXX) // end I_DepStall
+		): (16'hXXXX) // end I_FetchStall
+	): (16'hXXXX); // end I_LOCK
+
 // ###########
 // ## SCALE ##		  
 // ###########
 
-	
-// Matrix Assignments
-// 	
-// [ [255:240] [239:224] [223:208] [207:192] ]
-// | [191:176] [175:160] [159:144] [143:128] |
-// | [127:112] [111:96 ] [ 95:80 ] [ 79:64 ] |
-// [ [ 63:48 ] [ 47:32 ] [ 31:16 ] [ 15:0  ] ]
+// [ s_x  0    0    0 ]
+// |  0  s_y   0    0 |
+// |  0   0   s_z   0 |
+// [  0   0    0    1 ] 
 
-wire [255:0] Attribute_Matrix;
-wire [255:0] Rotate_Matrix;
-wire [255:0] Scale_Matrix;
-wire [255:0] Translate_Matrix;
-
-assign Rotate_Matrix = 
+assign Matrix_Curr = 
 	(I_LOCK==1'b1) ? 
 	(
 		(I_FetchStall==1'b0) ? 
 		(
 			(I_DepStall==1'b0) ? 
 			(
-				
-				(I_Opcode==`OP_ROTATE) ? 
-				(
-					// logic goes here
-				): (`ID_MATRIX)
-				
-			): (`ID_MATRIX) // end I_DepStall
-		): (`ID_MATRIX) // end I_FetchStall
-	): (`ID_MATRIX); // end I_LOCK
-
-assign Scale_Matrix = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				
 				(I_Opcode==`OP_SCALE) ? 
 				(
-					// logic goes here
-				): (`ID_MATRIX)
-				
-			): (`ID_MATRIX) // end I_DepStall
-		): (`ID_MATRIX) // end I_FetchStall
-	): (`ID_MATRIX); // end I_LOCK
+					{I_VR[31:16], 16h'0, 16h'0, 16h'0, 16'h0, I_VR[47:32], 16'h0, 16'h0, 16'h0, 16'h0, `FIXED_POINT_1, 16'h0, 16'h0, 16'h0, `FIXED_POINT_1}
+				): (16'hXXXX)	
+			): (16'hXXXX) // end I_DepStall
+		): (16'hXXXX) // end I_FetchStall
+	): (16'hXXXX); // end I_LOCK
 
-assign Translate_Matrix = 
+// ############
+// ## ROTATE ##		  
+// ############
+
+// [  cos  sin   0    0 ]
+// | -sin  cos   0    0 |
+// |   0    0    1    0 |
+// [   0    0    0    1 ] 
+
+assign Matrix_Curr = 
 	(I_LOCK==1'b1) ? 
 	(
 		(I_FetchStall==1'b0) ? 
 		(
 			(I_DepStall==1'b0) ? 
 			(
-				
-				(I_Opcode==`OP_TRANSLATE) ? 
+				(I_Opcode==`OP_ROTATE) ? 
 				(
-					// logic goes here
-				): (`ID_MATRIX)
-				
-			): (`ID_MATRIX) // end I_DepStall
-		): (`ID_MATRIX) // end I_FetchStall
-	): (`ID_MATRIX); // end I_LOCK	
+					{Cosine_Value, Sine_Value, 16h'0, 16h'0, -Sin_Value, Cosine_Value, 16'h0, 16'h0, 16'h0, 16'h0, `FIXED_POINT_1, 16'h0, 16'h0, 16'h0, `FIXED_POINT_1}
+				): (16'hXXXX)	
+			): (16'hXXXX) // end I_DepStall
+		): (16'hXXXX) // end I_FetchStall
+	): (16'hXXXX); // end I_LOCK
+ 
 
-
-// [x] [63:48] 
-// |y| [47:32]
-// |z| [31:16] 0
-//	[a] [15:0 ] 0
-wire [63:0] Vertex_Vector;
-assign Vertex_Vector = 
-	(I_LOCK==1'b1) ? 
-	(
-		(I_FetchStall==1'b0) ? 
-		(
-			(I_DepStall==1'b0) ? 
-			(
-				
-				(I_Opcode==`OP_SETVERTEX) ? 
-				(
-					// logic goes here
-				): (`VERTEX_INIT)
-				
-			): (`VERTEX_INIT) // end I_DepStall
-		): (`VERTEX_INIT) // end I_FetchStall
-	): (`VERTEX_INIT); // end I_LOCK	
 
 	
 /////////////////////////////////////////
@@ -912,14 +359,24 @@ begin
 	   O_Opcode <= I_Opcode;
 		O_DepStall <= 1'b0;
 		O_FetchStall <= 1'b0;
+		
+		// if SETVERTEX, form a triangle
+		
+		// if BEGINPRIMITIVE, enable _BeginPrimitive
 	 
 	   case (I_Opcode)
 		  	// GPU 
-			`OP_SETVERTEX, `OP_SETCOLOR, `OP_ROTATE, `OP_TRANSLATE, `OP_SCALE:
+			`OP_BEGINPRIMITIVE:
 			begin
-				O_DestValueV <= I_DestValueV;
+				O_Type <= I_Type;
+				_BeginPrimitive <= 1'b1;
 			end
-			`OP_SETVERTEX, `OP_SETCOLOR, `OP_ROTATE, `OP_TRANSLATE, `OP_SCALE:
+			`OP_SETVERTEX:
+			begin
+				Vertex_List[Vertex_CurrIdx] <= I_VR;
+				Vertex_CurrIdx = Vertex_CurrIdx + 1;
+			end
+			`OP_SETCOLOR, `OP_ROTATE, `OP_TRANSLATE, `OP_SCALE:
 			begin
 				O_DestValueV <= I_DestValueV;
 			end
