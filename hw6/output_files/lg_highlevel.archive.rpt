@@ -1,5 +1,5 @@
 Archive Project report for lg_highlevel
-Thu Apr 25 22:48:09 2013
+Fri Apr 26 04:28:01 2013
 Quartus II 32-bit Version 12.1 Build 177 11/07/2012 SJ Web Edition
 
 
@@ -35,7 +35,7 @@ applicable agreement for further details.
 +----------------------------------------------------------------+
 ; Archive Project Summary                                        ;
 +------------------------+---------------------------------------+
-; Archive Project Status ; Successful - Thu Apr 25 22:48:09 2013 ;
+; Archive Project Status ; Successful - Fri Apr 26 04:28:01 2013 ;
 ; Revision Name          ; lg_highlevel                          ;
 ; Top-level Entity Name  ; lg_highlevel                          ;
 ; Family                 ; Cyclone II                            ;
@@ -51,24 +51,19 @@ Info: File Set 'Source control' contains:
 Critical Warning: Analysis & Elaboration was not run successfully
     Critical Warning: The 'Automatically detected source files' file subset will attempt to guess which files are needed. The archive file will likely be larger than required and may still be incomplete.
 Warning (225010): Analysis was not performed on the current project. The Quartus II software may not be able to automatically locate all project files.
-Info: Parsing: writeback.v
-Info: Parsing: memory.v
-Info: Discovered: ./data.hex
-Info: Parsing: execute.v
-Info: Parsing: decode.v
 Info: Parsing: geometry.v
 Info: Discovered: ./sine_table.hex
 Info: Discovered: ./cosine_table.hex
 Info: ----------------------------------------------------------
 Info: ----------------------------------------------------------
-Info: Generated archive 'C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_cpuonly.qar'
+Info: Generated archive 'C:/Users/Chris/Dropbox/GitHub/CS3220_GPU/hw6_backup0426.qar'
 Info: ----------------------------------------------------------
 Info: ----------------------------------------------------------
 Info: Generated report 'lg_highlevel.archive.rpt'
 Info (23030): Evaluation of Tcl script c:/altera/12.1/quartus/common/tcl/apps/qpm/qar.tcl was successful
 Info: Quartus II 32-bit Shell was successful. 0 errors, 3 warnings
     Info: Peak virtual memory: 259 megabytes
-    Info: Processing ended: Thu Apr 25 22:48:09 2013
+    Info: Processing ended: Fri Apr 26 04:28:01 2013
     Info: Elapsed time: 00:00:01
     Info: Total CPU time (on all processors): 00:00:01
 
